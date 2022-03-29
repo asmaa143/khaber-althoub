@@ -15,11 +15,11 @@ class CreateWorkHoursTable extends Migration
     {
         Schema::create('work_hours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('working_day_id')->unsigned();
+            $table->foreignId('work_day_id')->nullable();
             $table->time('from')->nullable();
             $table->time('to')->nullable();
             $table->boolean('open')->default(true);
-            $table->foreign('working_day_id')
+            $table->foreign('work_day_id')
                 ->references('id')
                 ->on('work_days')
                 ->onUpdate('cascade')

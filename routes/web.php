@@ -20,6 +20,6 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
+    Route::resource('appointment', App\Http\Controllers\AppointmentController::class);
 });
 

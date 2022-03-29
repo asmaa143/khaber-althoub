@@ -11,4 +11,8 @@ class WorkDay extends Model
     protected $table='work_days';
     public $timestamps = true;
     protected $fillable=['week_day','is_active'];
+
+    public function workHours(){
+        return $this->hasMany(WorkHour::class);
+    }
 }

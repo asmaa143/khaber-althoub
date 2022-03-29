@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class WorkHour extends Model
 {
     use HasFactory;
-    protected $table='work_days';
+    protected $table='work_hours';
     public $timestamps = true;
-    protected $fillable=['working_day_id','from','to'];
+    protected $fillable=['work_day_id','from','to','open'];
+
+    public function workDay(){
+        return $this->belongsTo(WorkDay::class,'work_day_id','id');
+    }
 }
