@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('available-date',[\App\Http\Controllers\Api\ReservationController::class,'available_date']);
+Route::post('appointment',[\App\Http\Controllers\Api\ReservationController::class,'appointment']);
+Route::get('work-hour',[\App\Http\Controllers\Api\WorkHourController::class,'index']);
+Route::get('all-reservation',[\App\Http\Controllers\Api\ReservationController::class,'index']);

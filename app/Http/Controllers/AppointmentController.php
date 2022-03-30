@@ -39,6 +39,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Riyadh');
         foreach ((new ReflectionClass(WeekDaysEnum::class))->getConstants() as $day_name => $day_value) {
             WorkDay::updateOrCreate([
                 'week_day' => $day_value,
@@ -109,6 +110,7 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        date_default_timezone_set('Asia/Riyadh');
         $work_day=WorkDay::findOrFail($id);
         $work_day->update([
             'is_active'=>isset($request->is_active)? 1 : 0,
