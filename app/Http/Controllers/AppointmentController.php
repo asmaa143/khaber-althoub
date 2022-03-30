@@ -39,18 +39,19 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-
         foreach ((new ReflectionClass(WeekDaysEnum::class))->getConstants() as $day_name => $day_value) {
-            WorkDay::create([
-                'week_day'=>$day_value,
-                'is_active'=>1,
+            WorkDay::updateOrCreate([
+                'week_day' => $day_value,
+            ], [
+                'week_day' => $day_value,
+                'is_active'=>1
             ]);
         }
         $work_days=WorkDay::get();
         if($request->type=='every_day'){
             foreach ($work_days as $day){
                 for ($i = 0; $i < count($request->from); $i++) {
-                     $day->workHours()->create([
+                     $day->workHours()->updateOrCreate([
                             'from'=>$request->from[$i],
                             'to'=>$request->to[$i],
                             'open'=>1,
@@ -64,7 +65,7 @@ class AppointmentController extends Controller
                     'is_active' => isset($request->{'is_active_'. $day->week_day}) ? 1 : 0,
                 ]);
                 for ($i = 0; $i < count($request->{'from_'.$day->week_day}); $i++) {
-                    $day->workHours()->create([
+                    $day->workHours()->updateOrCreate([
                         'from'=>(isset($request->{'from_'. $day->week_day}[$i]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'from_'. $day->week_day}[$i] : null,
                         'to'=>(isset($request->{'to_'. $day->week_day}[$i]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'to_'. $day->week_day}[$i] : null,
                         'open'=>1,
@@ -73,6 +74,7 @@ class AppointmentController extends Controller
 
             }
         }
+        return redirect()->route('appointment.index');
     }
 
     /**
