@@ -94,8 +94,9 @@ class AppointmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(WorkDay $day)
+    public function edit($id)
     {
+        $day=WorkDay::with('workHours')->findOrFail($id);
         return view('appointment.edit',compact('day'));
     }
 
@@ -108,7 +109,20 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $work_day=WorkDay::findOrFail($id);
+        $work_day->update([
+            'is_active'=>isset($request->is_active)? 1 : 0,
+        ]);
+        for ($i = 0; $i < count($request->from); $i++) {
+            $work_day->workHours()->updateOrCreate([
+                'from'=>$request->from[$i],
+                'to'=>$request->to[$i],
+            ],[
+                'from'=>$request->from[$i],
+                'to'=>$request->to[$i],
+            ]);
+        }
+        return redirect()->route('appointment.index');
     }
 
     /**
