@@ -37,6 +37,12 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Appointment</span></a>
     </li>
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('work-time.index')}}">
+            <i class="fas fa-fw fa-clock"></i>
+            <span>Work Time</span></a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
