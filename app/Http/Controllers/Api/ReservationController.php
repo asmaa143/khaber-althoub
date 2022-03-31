@@ -40,10 +40,14 @@ class ReservationController extends Controller
         $date1 =Carbon::parse(Carbon::now());
         $date2 = Carbon::parse($request->date);
         $result = $date1->gt($date2);
-        if($day==Carbon::parse(Carbon::now())->dayName){
+        if($day==Carbon::parse(Carbon::now())->dayName && Carbon::parse($request->date)->format('d-m-y')== Carbon::now()->format('d-m-y')){
             $work_day=WorkDay::where('week_day',$day_const)->where('is_active',1)
                 -> with(['workHours' => fn($query) => $query->where('open',1)->whereTime('from', '<=', now())
                     ->whereTime('to', '>=', now())
+                    ->orWhere(function ($q)  {
+                        $q ->whereTime('from', '>=', now())
+                            ->whereTime('to', '>=', now());
+                    })
                 ])
                 ->get();
         }else if($result == false){
