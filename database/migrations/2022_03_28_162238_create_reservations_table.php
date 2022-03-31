@@ -22,7 +22,7 @@ class CreateReservationsTable extends Migration
             $table->time('from')->nullable();
             $table->time('to')->nullable();
             $table->integer('items')->default(0);
-            $table->enum('status',['Accept','Reject','Pending'])->default('Pending')->nullable();
+            $table->enum('status',['Accept','Reject','Pending','Finish'])->default('Pending');
             $table->timestamps();
         });
     }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TimeResource extends JsonResource
+class AllReservationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +14,16 @@ class TimeResource extends JsonResource
      */
     public function toArray($request)
     {
-         $from=(Carbon::parse($this->from)->format('a') == 'am') ? trans('web.am') : trans('web.pm');
-         $to=(Carbon::parse($this->to)->format('a') == 'am') ? trans('web.am') : trans('web.pm');
         return [
             'id'=>$this->id,
-            'from'=>date('h:i', strtotime($this->from)) . ' '. $from ,
-            'to'=>date('h:i', strtotime($this->to))  . ' '. $to,
+            'user_name'=>$this->user_name,
+            'user_phone '=>$this->user_phone ,
+            'area'=>$this->area,
+            'date'=>$this->date,
+            'from'=>$this->from,
+            'to'=>$this->to,
+            'items'=>$this->items,
+            'status'=>$this->status,
         ];
     }
 }

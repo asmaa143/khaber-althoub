@@ -22,3 +22,4 @@ Route::get('available-date',[\App\Http\Controllers\Api\ReservationController::cl
 Route::post('appointment',[\App\Http\Controllers\Api\ReservationController::class,'appointment']);
 Route::get('work-hour',[\App\Http\Controllers\Api\WorkHourController::class,'index']);
 Route::get('all-reservation',[\App\Http\Controllers\Api\ReservationController::class,'index']);
+Route::post('change-status',[\App\Http\Controllers\Api\ReservationController::class,'changeStatus']);

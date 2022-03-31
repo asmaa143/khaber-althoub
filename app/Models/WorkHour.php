@@ -15,4 +15,8 @@ class WorkHour extends Model
     public function workDay(){
         return $this->belongsTo(WorkDay::class,'work_day_id','id');
     }
+
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
+    }
 }
