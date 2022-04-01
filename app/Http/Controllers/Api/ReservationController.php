@@ -6,12 +6,15 @@ use App\Enum\WeekDaysEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllReservationResource;
 use App\Http\Resources\AvailableTimeResource;
+
+use App\Mail\ReservationMail;
 use App\Models\Reservation;
 use App\Models\WorkDay;
 use App\Models\WorkHour;
 use App\Traits\ApiTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 
 class ReservationController extends Controller
@@ -66,15 +69,18 @@ class ReservationController extends Controller
 
     public function appointment(Request $request){
 
+
+
+
         $reservation=Reservation::create([
             'user_name'=>$request->user_name,
-            'user_phone'=>$request->user_name,
+            'user_phone'=>$request->user_phone,
             'area'=>$request->area,
             'date'=>$request->date,
             'from'=>$request->from,
             'to'=>$request->to,
             'items'=>$request->items,
-            'status'=>'Accept',
+            'status'=>'Pending',
             'work_hour_id'=>$request->timing_id
         ]);
 
@@ -82,6 +88,9 @@ class ReservationController extends Controller
         $work_hour->update([
             'open'=>0
         ]);
+
+        $job=(new \App\Jobs\Reservation($reservation));
+        dispatch($job);
         return $this->returnSuccessMessage('Reservation Success');
     }
 
