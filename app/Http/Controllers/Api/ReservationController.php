@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enum\WeekDaysEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllReservationResource;
-use App\Http\Resources\AvailableTimeResource;
-
+use App\Http\Resources\TimeResource;
 use App\Mail\ReservationMail;
 use App\Models\Reservation;
 use App\Models\WorkDay;
@@ -14,7 +13,7 @@ use App\Models\WorkHour;
 use App\Traits\ApiTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+
 
 
 class ReservationController extends Controller
@@ -30,47 +29,44 @@ class ReservationController extends Controller
             return $this->returnError(404,'Invalid');
         }
 
-
-
     }
 
     public function available_date (Request $request){
         date_default_timezone_set('Asia/Riyadh');
-
         $date = $request->date;
         $day= Carbon::parse($date)->dayName;
         $day_const= WeekDaysEnum::getConstantByName(strtoupper($day));
+
         $date1 =Carbon::parse(Carbon::now());
         $date2 = Carbon::parse($request->date);
         $result = $date1->gt($date2);
-        if($day==Carbon::parse(Carbon::now())->dayName && Carbon::parse($request->date)->format('d-m-y')== Carbon::now()->format('d-m-y')){
-            $work_day=WorkDay::where('week_day',$day_const)->where('is_active',1)
-                -> with(['workHours' => fn($query) => $query->where('open',1)->whereTime('from', '<=', now())
-                    ->whereTime('to', '>=', now())
-                    ->orWhere(function ($q)  {
-                        $q ->whereTime('from', '>=', now())
-                            ->whereTime('to', '>=', now());
-                    })
-                ])
-                ->get();
+
+        $reservations=Reservation::whereIn('status',['Accept','Pending'])
+            ->whereDate('date','=',Carbon::parse($date))->pluck('work_hour_id');
+         $reserve_time=WorkHour::whereIn('id',$reservations)->get();
+
+        $work_day=WorkDay::where('week_day',$day_const)->where('is_active',1)->first();
+
+        if($day==Carbon::parse(Carbon::now())->dayName &&
+            Carbon::parse($request->date)->format('d-m-y')== Carbon::now()->format('d-m-y')){
+
+            $work_time=WorkHour::where('work_day_id',$work_day->id)->whereTime('from', '<=', now())
+                ->whereTime('to', '>=', now())
+                ->orWhere(function ($q)  {
+                    $q ->whereTime('from', '>=', now())
+                        ->whereTime('to', '>=', now());
+                })->get();
+
         }else if($result == false){
-            $work_day=WorkDay::where('week_day',$day_const)->where('is_active',1)
-                -> with(['workHours' => fn($query) => $query->where('open',1)
-                ])
-                ->get();
+            $work_time=WorkHour::where('work_day_id',$work_day->id)->get();
         }else{
-            $work_day=[];
+            $work_time=[];
         }
-
-
-        return $this->returnData('Data',AvailableTimeResource::collection($work_day),'Available Time');
+        return $this->returnData('Data',TimeResource::collection($work_time->diff($reserve_time)),'Available Time');
 
     }
 
     public function appointment(Request $request){
-
-
-
 
         $reservation=Reservation::create([
             'user_name'=>$request->user_name,
@@ -84,13 +80,8 @@ class ReservationController extends Controller
             'work_hour_id'=>$request->timing_id
         ]);
 
-        $work_hour=WorkHour::find($request->timing_id);
-        $work_hour->update([
-            'open'=>0
-        ]);
-
-        $job=(new \App\Jobs\Reservation($reservation));
-        dispatch($job);
+//        $job=(new \App\Jobs\Reservation($reservation));
+//        dispatch($job);
         return $this->returnSuccessMessage('Reservation Success');
     }
 
@@ -101,9 +92,6 @@ class ReservationController extends Controller
                 'status'=>$request->status,
             ]);
             if($reserve->status=='Reject'){
-               $reserve->workHour->update([
-                  'open'=>1
-               ]);
 
                $reserve->delete();
             }

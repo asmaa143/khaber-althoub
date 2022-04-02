@@ -26,6 +26,7 @@
                             <th>Time</th>
                             <th>Items</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -36,6 +37,7 @@
                             <th>Time</th>
                             <th>Items</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -54,6 +56,10 @@
                                 </td>
                                 <td>
                                    {{$value->status}}
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="{{route('accept',$value->id)}}">Accept</a>
+                                    <a class="btn btn-danger btn-sm" href="{{route('reject',$value->id)}}">Reject</a>
                                 </td>
                             </tr>
                         @empty

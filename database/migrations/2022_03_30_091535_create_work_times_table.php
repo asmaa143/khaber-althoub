@@ -15,9 +15,10 @@ class CreateWorkTimesTable extends Migration
     {
         Schema::create('work_times', function (Blueprint $table) {
             $table->id();
-            $table->string('morning_time');
-            $table->string('evening_time');
-            $table->string('friday');
+            $table->string('description');
+            $table->string('label');
+            $table->time('from');
+            $table->time('to');
             $table->timestamps();
         });
     }

@@ -29,17 +29,19 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>Morning Time</th>
-                            <th>Evening Time</th>
-                            <th>Friday</th>
+                            <th>Work Day</th>
+                            <th>Shift Name</th>
+                            <th>Shift From</th>
+                            <th>Shift to</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>Morning Time</th>
-                            <th>Evening Time</th>
-                            <th>Friday</th>
+                            <th>Work Day</th>
+                            <th>Shift Name</th>
+                            <th>Shift From</th>
+                            <th>Shift to</th>
                             <th>Action</th>
                         </tr>
                         </tfoot>
@@ -48,13 +50,16 @@
                             <tr>
 
                                 <td>
-                                 {{$time->morning_time}}
+                                 {{$time->description}}
                                 </td>
                                 <td>
-                                    {{$time->evening_time}}
+                                    {{$time->label}}
                                 </td>
                                 <td>
-                                    {{$time->friday}}
+                                    {{$time->from}}
+                                </td>
+                                <td>
+                                    {{$time->to}}
                                 </td>
                                 <td>
                                     <div class="row text-center">

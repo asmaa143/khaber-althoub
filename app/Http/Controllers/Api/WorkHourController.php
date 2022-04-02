@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AvailableTimeResource;
 use App\Http\Resources\WorkTimeResource;
 use App\Models\WorkTime;
 use App\Traits\ApiTrait;

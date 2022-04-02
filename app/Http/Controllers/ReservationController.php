@@ -11,4 +11,21 @@ class ReservationController extends Controller
        $reservation=Reservation::all();
        return view('reservations.index',compact('reservation'));
    }
+   public function accept($id){
+       $reservation=Reservation::find($id);
+       $reservation->update([
+           'status'=>'Accept'
+       ]);
+       return redirect()->route('reservation');
+
+   }
+
+    public function reject($id){
+        $reservation=Reservation::find($id);
+        $reservation->update([
+            'status'=>'Reject'
+        ]);
+        $reservation->delete();
+        return redirect()->route('reservation');
+    }
 }

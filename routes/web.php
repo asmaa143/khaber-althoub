@@ -23,5 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reservation', [App\Http\Controllers\ReservationController::class, 'index'])->name('reservation');
     Route::resource('appointment', App\Http\Controllers\AppointmentController::class);
     Route::resource('work-time', App\Http\Controllers\WorkTimeController::class);
+    Route::get('accept/{id}', [App\Http\Controllers\ReservationController::class, 'accept'])->name('accept');
+    Route::get('reject/{id}', [App\Http\Controllers\ReservationController::class, 'reject'])->name('reject');
 });
 

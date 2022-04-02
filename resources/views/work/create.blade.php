@@ -1,5 +1,12 @@
 @extends('layouts.app')
+@section('styles')
+    <style>
+        input{
+            direction: rtl;
+        }
+    </style>
 
+@endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -11,16 +18,20 @@
                     <form action="{{route('work-time.store')}}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="morning_time" class="form-label">Morning Time</label>
-                            <input type="text" name="morning_time" class="form-control" id="morning_time">
+                            <label for="description" class="form-label">Work Day</label>
+                            <input  type="text" name="description" class="form-control" id="description">
                         </div>
                         <div class="mb-3">
-                            <label for="evening_time" class="form-label">Evening Time</label>
-                            <input type="text" name="evening_time" class="form-control" id="evening_time">
+                            <label for="label" class="form-label">Shift Name</label>
+                            <input type="text" name="label" class="form-control" id="label">
                         </div>
                         <div class="mb-3">
-                            <label for="friday" class="form-label">Friday</label>
-                            <input type="text" name="friday" class="form-control" id="friday">
+                            <label for="from" class="form-label">Shift From</label>
+                            <input type="time" name="from" class="form-control" id="from">
+                        </div>
+                        <div class="mb-3">
+                            <label for="to" class="form-label">Shift To</label>
+                            <input type="time" name="to" class="form-control" id="to">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

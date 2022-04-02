@@ -49,9 +49,7 @@ class Reservation extends Command
            $value->update([
                'status'=>'Finish'
            ]);
-           $value->workHour->update([
-               'open'=>1
-           ]);
+
        }
     }
 }
