@@ -45,11 +45,13 @@ class Reservation extends Command
                    ->orWhereTime('to','<',Carbon::now());
            })->get();
 
-       foreach ($reservation as $value){
-           $value->update([
-               'status'=>'Finish'
-           ]);
+       if( $reservation->isNotEmpty()){
+           foreach ($reservation as $value){
+               $value->update([
+                   'status'=>'Finish'
+               ]);
 
+           }
        }
     }
 }
