@@ -42,7 +42,9 @@ class Reservation extends Command
        $reservation=\App\Models\Reservation::where('status','Accept')
            ->where(function ($q)  {
                $q ->whereDate('date','<',Carbon::now())
-                   ->orWhereTime('to','<',Carbon::now());
+                   ->orWhereHas('workHour',function ($q){
+                      return $q->whereTime('to','<',Carbon::now());
+                   });
            })->get();
 
        if( $reservation->isNotEmpty()){
