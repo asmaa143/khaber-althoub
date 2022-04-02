@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ReservationController extends Controller
 {
    public function index(){
-       $reservation=Reservation::all();
+       $reservation=Reservation::where('status','<>','Finish')->orderBy('date','DESC')->get();
        return view('reservations.index',compact('reservation'));
    }
    public function accept($id){
@@ -27,5 +27,10 @@ class ReservationController extends Controller
         ]);
         $reservation->delete();
         return redirect()->route('reservation');
+    }
+
+    public function finish(){
+        $reservation=Reservation::where('status','Finish')->orderBy('date','DESC')->get();
+        return view('reservations.end',compact('reservation'));
     }
 }

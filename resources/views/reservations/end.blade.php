@@ -14,68 +14,56 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Work Time</h1>
-        <div class="my-3">
-            <a style="color: #d0ad54" href="{{route('work-time.create')}}" class="btn btn-dark btn-icon-split">
-            <span class="icon text-white-600">
-                <i class="fas fa-arrow-right"></i>
-            </span>
-                <span class="text">Add Work Time</span>
-            </a>
-        </div>
-
+        <h1 class="h3 mb-2 text-gray-800">Reservation</h1>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-dark">Work Time Table</h6>
+                <h6 class="m-0 font-weight-bold text-dark">Reservation Table</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>Work Day</th>
-                            <th>Shift Name</th>
-                            <th>Shift From</th>
-                            <th>Shift to</th>
-                            <th>Action</th>
+                            <th>User Name</th>
+                            <th>User Phone </th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Items</th>
+                            <th>Status</th>
+
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>Work Day</th>
-                            <th>Shift Name</th>
-                            <th>Shift From</th>
-                            <th>Shift to</th>
-                            <th>Action</th>
+                            <th>User Name</th>
+                            <th>User Phone </th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Items</th>
+                            <th>Status</th>
+
                         </tr>
                         </tfoot>
                         <tbody>
-                        @forelse($work_time as $time)
+                        @forelse($reservation as $value)
                             <tr>
+                                <td>{{$value->user_name}}</td>
+                                <td>{{$value->user_phone}}</td>
+                                <td>
+                                    {{$value->date}}
+                                </td>
+                                <td>
+                                    {{$value->from}} - {{$value->to}}
+                                </td>
+                                <td>
+                                    {{$value->items}}
+                                </td>
+                                <td>
+                                    {{$value->status}}
+                                </td>
 
-                                <td>
-                                 {{$time->description}}
-                                </td>
-                                <td>
-                                    {{$time->label}}
-                                </td>
-                                <td>
-                                    {{$time->from}}
-                                </td>
-                                <td>
-                                    {{$time->to}}
-                                </td>
-                                <td>
-                                    <div class="row text-center">
-                                        <div class="col-12">
-                                            <a style="color: #d0ad54" href="{{route('work-time.edit',$time->id)}}" class="btn btn-dark btn-circle btn-sm ">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
                             </tr>
                         @empty
                             <tr>No Data Found</tr>

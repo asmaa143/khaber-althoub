@@ -23,7 +23,7 @@ class ReservationController extends Controller
     public function index(Request $request){
 
         if($request->token =='A0DA959F6DD349A1867F37BA6AEBA2D5') {
-            $reservations=Reservation::get();
+            $reservations=Reservation::orderBy('date','DESC')->get();
             return $this->returnData('Data',AllReservationResource::collection($reservations),'All Reservation');
         }else{
             return $this->returnError(404,'Invalid');

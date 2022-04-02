@@ -2,6 +2,12 @@
 @section('styles')
     <!-- Custom styles for this page -->
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    <style>
+        .active .page-link{
+            background-color: rgba(0, 0, 0, 0.65) !important;
+            color:#d0ad54 !important; ;
+        }
+    </style>
 @endsection
 @section('content')
     <!-- Begin Page Content -->
@@ -13,7 +19,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Reservation Table</h6>
+                <h6 class="m-0 font-weight-bold text-dark">Reservation Table</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -58,8 +64,8 @@
                                    {{$value->status}}
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary btn-sm" href="{{route('accept',$value->id)}}">Accept</a>
-                                    <a class="btn btn-danger btn-sm" href="{{route('reject',$value->id)}}">Reject</a>
+                                    <a style="color:#d0ad54" class="btn btn-dark btn-sm" href="{{route('accept',$value->id)}}">Accept</a>
+                                    <a style="color:#d0ad54" class="btn btn-dark btn-sm" href="{{route('reject',$value->id)}}">Reject</a>
                                 </td>
                             </tr>
                         @empty

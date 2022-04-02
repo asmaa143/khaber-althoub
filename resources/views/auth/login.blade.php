@@ -22,7 +22,7 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-dark">
 
 <div class="container">
 
@@ -69,9 +69,12 @@
                                                 Me</label>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                                        {{ __('Login') }}
-                                    </button>
+                                    <div>
+                                        <button style="background-color: #d0ad54 ; color: #000000" type="submit" class="btn  btn-user btn-block">
+                                            {{ __('Login') }}
+                                        </button>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
