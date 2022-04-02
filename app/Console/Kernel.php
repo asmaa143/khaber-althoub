@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->command('status:finish')->hourly();
+        $schedule->command('status:finish')->everyMinute();
     }
 
     /**
