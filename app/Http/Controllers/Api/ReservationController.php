@@ -80,8 +80,8 @@ class ReservationController extends Controller
             'work_hour_id'=>$request->timing_id
         ]);
 
-//        $job=(new \App\Jobs\Reservation($reservation));
-//        dispatch($job);
+        $job=(new \App\Jobs\Reservation($reservation));
+        dispatch($job);
         return $this->returnSuccessMessage('Reservation Success');
     }
 
