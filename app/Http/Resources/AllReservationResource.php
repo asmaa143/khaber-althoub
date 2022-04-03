@@ -17,7 +17,7 @@ class AllReservationResource extends JsonResource
         return [
             'id'=>$this->id,
             'user_name'=>$this->user_name,
-            'user_phone '=>$this->user_phone ,
+            'user_phone'=>$this->user_phone ,
             'area'=>$this->area,
             'date'=>$this->date,
             'from'=>$this->from,
