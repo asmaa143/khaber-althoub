@@ -51,28 +51,32 @@ class AppointmentController extends Controller
         $work_days=WorkDay::get();
         if($request->type=='every_day'){
             foreach ($work_days as $day){
-                for ($i = 0; $i < count($request->from); $i++) {
-                     $day->workHours()->updateOrCreate([
-                            'from'=>$request->from[$i],
-                            'to'=>$request->to[$i],
-                            'open'=>1,
-                        ]);
+                if(count( $day->workHours)>0){
+                    $day->workHours()->delete();
                 }
-
-            }
-        }else{
-            foreach ($work_days as $day){
-                $day->update([
-                    'is_active' => isset($request->{'is_active_'. $day->week_day}) ? 1 : 0,
-                ]);
-                for ($i = 0; $i < count($request->{'from_'.$day->week_day}); $i++) {
+                foreach ($request->from as $key=>$value) {
                     $day->workHours()->updateOrCreate([
-                        'from'=>(isset($request->{'from_'. $day->week_day}[$i]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'from_'. $day->week_day}[$i] : null,
-                        'to'=>(isset($request->{'to_'. $day->week_day}[$i]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'to_'. $day->week_day}[$i] : null,
+                        'from'=>$request->from[$key],
+                        'to'=>$request->to[$key],
                         'open'=>1,
                     ]);
                 }
-
+            }
+        }else{
+            foreach ($work_days as $day){
+                if(count( $day->workHours)>0){
+                    $day->workHours()->delete();
+                }
+                $day->update([
+                    'is_active' => isset($request->{'is_active_'. $day->week_day}) ? 1 : 0,
+                ]);
+                foreach ($request->{'from_'.$day->week_day} as $key=>$value) {
+                    $day->workHours()->updateOrCreate([
+                        'from'=>(isset($request->{'from_'. $day->week_day}[$key]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'from_'. $day->week_day}[$key] : null,
+                        'to'=>(isset($request->{'to_'. $day->week_day}[$key]) && isset($request->{'is_active_'. $day->week_day}) ) ? $request->{'to_'. $day->week_day}[$key] : null,
+                        'open'=>1,
+                    ]);
+                }
             }
         }
         return redirect()->route('appointment.index');
@@ -112,16 +116,14 @@ class AppointmentController extends Controller
     {
         date_default_timezone_set('Asia/Riyadh');
         $work_day=WorkDay::findOrFail($id);
+        $work_day->workHours()->delete();
         $work_day->update([
             'is_active'=>isset($request->is_active)? 1 : 0,
         ]);
-        for ($i = 0; $i < count($request->from); $i++) {
-            $work_day->workHours()->updateOrCreate([
-                'from'=>$request->from[$i],
-                'to'=>$request->to[$i],
-            ],[
-                'from'=>$request->from[$i],
-                'to'=>$request->to[$i],
+        foreach ($request->from as $key=>$value) {
+            $work_day->workHours()->create([
+                'from'=>$request->from[$key],
+                'to'=>$request->to[$key],
             ]);
         }
         return redirect()->route('appointment.index');

@@ -33,7 +33,7 @@ class Reservation implements ShouldQueue
      */
     public function handle()
     {
-        $emails=['Asm2kh@gmail.com'];
+        $emails=['Meshary@khaber.sa','info@khaber.sa','Yazeed@khaber.sa'];
         foreach ($emails as $email){
          Mail::to($email)->send(new ReservationMail($this->data));
         }
