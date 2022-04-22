@@ -41,33 +41,43 @@ class ReservationController extends Controller
         $date2 = Carbon::parse($request->date);
         $result = $date1->gt($date2);
 
-        $reservations=Reservation::whereIn('status',['Accept','Pending'])
-            ->whereDate('date','=',Carbon::parse($date))->pluck('work_hour_id');
-         $reserve_time=WorkHour::whereIn('id',$reservations)->get();
+        $reservations_from=Reservation::whereIn('status',['Accept','Pending'])
+            ->whereDate('date','=',Carbon::parse($date))->pluck('shift_from');
+
+        $reservations_to=Reservation::whereIn('status',['Accept','Pending'])
+            ->whereDate('date','=',Carbon::parse($date))->pluck('shift_to');
+         $reserve_time=WorkHour::whereIn('from',$reservations_from)->whereIn('to',$reservations_to)->get();
+
+
 
         $work_day=WorkDay::where('week_day',$day_const)->where('is_active',1)->first();
 
         if($day==Carbon::parse(Carbon::now())->dayName &&
             Carbon::parse($request->date)->format('d-m-y')== Carbon::now()->format('d-m-y')){
-
             $work_time=WorkHour::where('work_day_id',$work_day->id)->whereTime('from', '<=', now())
                 ->whereTime('to', '>=', now())
-                ->orWhere(function ($q)  {
-                    $q ->whereTime('from', '>=', now())
+                ->orWhere(function ($q) use ($work_day)  {
+                    $q ->where('work_day_id',$work_day->id)
+                        ->whereTime('from', '>=', now())
                         ->whereTime('to', '>=', now());
                 })->get();
 
+
         }else if($result == false){
+
             $work_time=WorkHour::where('work_day_id',$work_day->id)->get();
         }else{
             $work_time=[];
         }
+
         return $this->returnData('Data',TimeResource::collection($work_time->diff($reserve_time)),'Available Time');
 
     }
 
     public function appointment(Request $request){
 
+
+        $work_hour=WorkHour::where('id',$request->timing_id)->first();
         $reservation=Reservation::create([
             'user_name'=>$request->user_name,
             'user_phone'=>$request->user_phone,
@@ -75,6 +85,8 @@ class ReservationController extends Controller
             'date'=>$request->date,
             'from'=>$request->from,
             'to'=>$request->to,
+            'shift_from'=>$work_hour->from,
+            'shift_to'=>$work_hour->to,
             'items'=>$request->items,
             'status'=>'Pending',
             'work_hour_id'=>$request->timing_id

@@ -120,12 +120,14 @@ class AppointmentController extends Controller
         $work_day->update([
             'is_active'=>isset($request->is_active)? 1 : 0,
         ]);
-        foreach ($request->from as $key=>$value) {
-            $work_day->workHours()->create([
-                'from'=>$request->from[$key],
-                'to'=>$request->to[$key],
-            ]);
-        }
+       if(isset($request->from)){
+           foreach ($request->from as $key=>$value) {
+               $work_day->workHours()->create([
+                   'from'=>$request->from[$key],
+                   'to'=>$request->to[$key],
+               ]);
+           }
+       }
         return redirect()->route('appointment.index');
     }
 
